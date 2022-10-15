@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.harlaus.mapper.SubUserMapper">
+
+    <resultMap id="SubUserVoMap" type="com.harlaus.entity.SubUser">
+        <result property="phone" column="phone" jdbcType="VARCHAR" typeHandler="com.harlaus.handler.UserTypeHandler" />
+        <result property="QQNumber" column="qq_number" jdbcType="VARCHAR" javaType="String"  typeHandler="com.harlaus.handler.UserTypeHandler"/>
+        <result property="isSub" column="is_sub" jdbcType="BIT"/>
+    </resultMap>
+
+    <insert id="doRegisterOne">
+        INSERT INTO sub_uer ( qq_number, phone, is_sub )
+        VALUES
+        (
+            #{subUser.QQNumber,typeHandler=com.harlaus.handler.UserTypeHandler},
+            #{subUser.phone,typeHandler=com.harlaus.handler.UserTypeHandler},
+            0)
+    </insert>
+
+    <update id="doDelOne">
+        UPDATE sub_uer
+        SET is_sub = 1
+        WHERE
+            qq_number = #{subUser.QQNumber,typeHandler=com.harlaus.handler.UserTypeHandler} and phone = #{subUser.phone,typeHandler=com.harlaus.handler.UserTypeHandler}
+    </update>
+
+    <update id="doRestOne">
+        UPDATE sub_uer
+        SET is_sub = 0
+        WHERE
+            qq_number = #{subUser.QQNumber,typeHandler=com.harlaus.handler.UserTypeHandler} and phone = #{subUser.phone,typeHandler=com.harlaus.handler.UserTypeHandler}
+    </update>
+
+    <select id="getOne" resultType="com.harlaus.entity.SubUser">
+        SELECT
+            is_sub
+        FROM
+            sub_uer
+        WHERE
+            qq_number = #{subUser.QQNumber,typeHandler=com.harlaus.handler.UserTypeHandler} or phone = #{subUser.phone,typeHandler=com.harlaus.handler.UserTypeHandler}
+    </select>
+
+    <select id="getOneByPhone" resultMap="SubUserVoMap">
+        SELECT
+            phone,
+            qq_number
+        FROM
+            sub_uer
+        WHERE
+            phone = #{subUser.phone,typeHandler=com.harlaus.handler.UserTypeHandler} and is_sub='0'
+    </select>
+</mapper>

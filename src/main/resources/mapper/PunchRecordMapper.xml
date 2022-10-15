@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.harlaus.mapper.PunchRecordMapper">
+
+    <resultMap id="BaseResultMap" type="com.harlaus.entity.PunchRecord">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="studentId" column="student_id" jdbcType="INTEGER"/>
+            <result property="name" column="name" jdbcType="VARCHAR"/>
+            <result property="sex" column="sex" jdbcType="VARCHAR"/>
+            <result property="punchTime" column="punch_time" jdbcType="TIMESTAMP"/>
+            <result property="tiwen" column="tiwen" jdbcType="VARCHAR"/>
+            <result property="tiwen2" column="tiwen2" jdbcType="VARCHAR"/>
+            <result property="tiwen3" column="tiwen3" jdbcType="VARCHAR"/>
+            <result property="dwaddress" column="dwaddress" jdbcType="VARCHAR"/>
+            <result property="wxprovince" column="wxprovince" jdbcType="VARCHAR"/>
+            <result property="wxcity" column="wxcity" jdbcType="VARCHAR"/>
+            <result property="state" column="state" jdbcType="BIT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,student_id,name,
+        sex,punch_time,tiwen,
+        tiwen2,tiwen3,dwaddress,
+        wxprovince,wxcity,state
+    </sql>
+    <select id="queryPunchRecordByStuId" resultType="com.harlaus.entity.vo.BackRecordVo">
+        SELECT name,
+               DATE_FORMAT(punch_time,'%Y-%m-%d %H:%i:%s') punch_time,
+               dwaddress,
+               state,
+               tiwen,
+               tiwen2,
+               tiwen3
+        FROM
+            punch_record
+        WHERE
+            student_id = #{searchRecordVo.id}
+          AND punch_time BETWEEN #{searchRecordVo.startTime} AND #{searchRecordVo.endTime}
+        ORDER BY
+            punch_time desc
+    </select>
+</mapper>

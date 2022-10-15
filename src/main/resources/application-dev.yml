@@ -1,0 +1,21 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/auto_punch
+    username: root
+    password: 123456
+mybatis-plus:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.harlaus.entity
+server:
+  port: 8001
+logging:
+  level:
+    com.harlaus: debug
+
+Cors:
+  Map: /**
+  Origins: http://localhost:8080
+  Methods: ["POST", "GET", "PUT", "OPTIONS", "DELETE"]
+  Age: 3600
+

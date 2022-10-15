@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.harlaus.mapper.UserMapper">
+
+    <resultMap id="BaseResultMap" type="com.harlaus.entity.User">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="phone" column="phone" jdbcType="VARCHAR"  typeHandler="com.harlaus.handler.UserTypeHandler"/>
+            <result property="password" column="password" jdbcType="VARCHAR" typeHandler="com.harlaus.handler.UserTypeHandler"/>
+            <result property="tiwen" column="tiwen" jdbcType="VARCHAR"/>
+            <result property="tiwen2" column="tiwen2" jdbcType="VARCHAR"/>
+            <result property="tiwen3" column="tiwen3" jdbcType="VARCHAR"/>
+            <result property="dwaddress" column="dwaddress" jdbcType="VARCHAR"  typeHandler="com.harlaus.handler.UrlEncodeTypeHandler"/>
+            <result property="wxprovince" column="wxprovince" jdbcType="VARCHAR"  typeHandler="com.harlaus.handler.UrlEncodeTypeHandler"/>
+            <result property="wxcity" column="wxcity" jdbcType="VARCHAR"  typeHandler="com.harlaus.handler.UrlEncodeTypeHandler"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,phone,password,
+        tiwen,tiwen2,tiwen3,
+        dwaddress,wxprovince,wxcity
+    </sql>
+    <insert id="doRegisterOne">
+        insert into user(phone,password,tiwen,tiwen2,tiwen3,dwaddress,wxprovince,wxcity,is_del)
+        values (#{user.phone,typeHandler=com.harlaus.handler.UserTypeHandler},
+                #{user.password,typeHandler=com.harlaus.handler.UserTypeHandler},
+                #{user.tiwen},
+                #{user.tiwen2},
+                #{user.tiwen3},
+                #{user.dwaddress,typeHandler=com.harlaus.handler.UrlEncodeTypeHandler},
+                #{user.wxprovince,typeHandler=com.harlaus.handler.UrlEncodeTypeHandler},
+                #{user.wxcity,typeHandler=com.harlaus.handler.UrlEncodeTypeHandler},
+                0)
+    </insert>
+    <update id="delOne">
+        UPDATE user
+        SET is_del=1
+        WHERE
+            phone=#{user.phone,typeHandler=com.harlaus.handler.UserTypeHandler}
+        and password=#{user.password,typeHandler=com.harlaus.handler.UserTypeHandler}
+    </update>
+    <update id="restOne">
+        UPDATE user
+        SET is_del=0
+        WHERE
+            phone=#{user.phone,typeHandler=com.harlaus.handler.UserTypeHandler}
+          and password=#{user.password,typeHandler=com.harlaus.handler.UserTypeHandler}
+    </update>
+    <select id="getAll" resultMap="BaseResultMap">
+        SELECT
+            phone,
+            PASSWORD,
+            tiwen,
+            tiwen2,
+            tiwen3,
+            dwaddress,
+            wxprovince,
+            wxcity
+        FROM
+            user
+        WHERE is_del='0'
+    </select>
+    <select id="getOne" resultMap="BaseResultMap">
+        SELECT
+            phone
+        FROM
+            user
+        where phone=#{user.phone,typeHandler=com.harlaus.handler.UserTypeHandler}
+        and password=#{user.password,typeHandler=com.harlaus.handler.UserTypeHandler}
+        and is_del='0'
+    </select>
+    <select id="getOneNoIsDel" resultType="com.harlaus.entity.User">
+        SELECT
+            phone
+        FROM
+            user
+        where phone=#{user.phone,typeHandler=com.harlaus.handler.UserTypeHandler}
+          and password=#{user.password,typeHandler=com.harlaus.handler.UserTypeHandler}
+    </select>
+
+</mapper>
